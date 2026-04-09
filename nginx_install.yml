@@ -1,0 +1,19 @@
+- name: Install nginx
+  hosts: web
+  become: yes
+ 
+  tasks:
+    - name: Install nginx packages
+      apt:
+        name: nginx
+        state: present
+
+    - name: nginx Start
+      service:
+         name: nginx
+         state: started
+         enabled: yes
+    - name: copy index file
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html

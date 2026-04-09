@@ -1,0 +1,10 @@
+- name: Test Ansible
+  hosts: web
+
+  tasks:
+    - name: ping test
+      ping:
+    
+    - name: Print message
+      debug:
+         msg: "Ansible working"

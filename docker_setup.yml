@@ -1,0 +1,45 @@
+- name: Docker + Nginx setup
+  hosts: web
+  become: yes
+
+  tasks:
+
+    - name: Update apt
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Install Python Docker lib
+      apt:
+        name: python3-docker
+        state: present
+
+    - name: Start Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create html directory
+      file:
+        path: /home/ubuntu/html
+        state: directory
+
+    - name: Copy index.html
+      copy:
+        src: index.html
+        dest: /home/ubuntu/html/index.html
+
+    - name: Run nginx container
+      docker_container:
+        name: mynginx
+        image: nginx
+        state: started
+        ports:
+          - "8080:80"
+        volumes:
+          - /home/ubuntu/html:/usr/share/nginx/html
